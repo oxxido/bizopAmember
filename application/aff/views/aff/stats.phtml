@@ -1,0 +1,75 @@
+<?php $title = ___('Affiliate stats'); $this->setLayout('member/layout.phtml');
+$this->headLink()->appendStylesheet($this->_scriptCss('aff.css'));
+echo $this->blocks('aff/top');
+if ($rows) :
+$this->enableReports();
+?>
+<?php echo $report; ?>
+<h2><?php __e('Report') ?><?php if (isset($period)) :?> (<?php p(amDate($period[0])); ?>&ndash;<?php p(amDate($period[1])) ?>)<?php endif;?></h2>
+<?php if (isset($period)) :?>
+<p><a href="<?php p(REL_ROOT_URL . '/aff/member/stats') ?>"><?php __e('back to full report') ?></a></p>
+<?php endif; ?>
+<div class="grid-container">
+    <table class="grid">
+        <tr>
+            <th><?php __e('Date') ?></th>
+            <th style="text-align:right"><?php __e('Commission Earned') ?></th>
+            <th style="text-align:right"><?php __e('All/Unique Clicks') ?></th>
+        </tr>
+        <?php foreach ($rows as $key => $row) : ?>
+        <tr>
+            <td><?php echo $row['date_href'] ? sprintf('<a href="%s">%s</a>', $row['date_href'], $this->escape($row['date'])) : $this->escape($row['date']); ?></td>
+            <?php $comm = $row['commission'] >= 0 ?
+                Am_Currency::render($row['commission']) :
+                '- ' . Am_Currency::render(abs($row['commission'])); ?>
+            <td style="text-align:right"><?php p($comm) ?></td>
+            <?php $click = !$row['clicks_all'] ? '&ndash;' : sprintf('%d/%d', $row['clicks_all'], $row['clicks']); ?>
+            <td style="text-align:right"><?php echo $row['clicks_href'] ? sprintf('<a href="%s" class="local aff-detail">%s</a>',$row['clicks_href'], $click) : $click ?></td>
+        </tr>
+        <tr id="detail-<?php p($key) ?>" class="aff-details" style="display: none">
+            <td colspan="3">
+                <div style="float: right;">
+                    <a href="javascript:;" class="detail-close"><?php __e('Close') ?></a>
+                </div>
+                <div class="content"></div>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+        <tr style="font-weight: bold">
+            <td><?php __e('TOTAL') ?></td>
+            <?php $comm = $totals['commission'] >= 0 ?
+                Am_Currency::render($totals['commission']) :
+                '- ' . Am_Currency::render(abs($totals['commission'])); ?>
+            <td style="text-align:right"><?php p($comm) ?></td>
+            <td style="text-align:right"><?php echo !$totals['clicks_all'] ? '&ndash;' : sprintf('%d/%d', $totals['clicks_all'], $totals['clicks']); ?></td>
+        </tr>
+    </table>
+</div>
+<div id="aff-detail"></div>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $("a.detail-close").click(function(){
+            $(this).parents("tr").hide();
+        });
+    });
+    function showAffDetails(date)
+    {
+        var url = "<?php echo j($this->url(array('detailDate'=>'DATE'))) ?>";
+        jQuery("tr#detail-"+date).toggle();
+        jQuery("tr#detail-"+date+":visible .content").load(url.replace(/DATE/, date));
+    }
+    function affDetail(from, to, label)
+    {
+        var url = "<?php j($this->pUrl(
+                'member', 'clicks-detail', 'aff',
+                'from', 'FROMDATE', 'to', 'TODATE'))?>";
+        jQuery("#aff-detail").load(url.replace(/FROMDATE/, encodeURIComponent(from)).replace(/TODATE/, encodeURIComponent(to)), function(){
+            jQuery("#aff-detail").amPopup({
+                title: '<?php __e('Affiliate Clicks for') ?>' + ' ' + label
+            });
+        });
+    }
+</script>
+<?php else : //$rows ?>
+    <?php __e('No records found'); ?>
+<?php endif; ?>

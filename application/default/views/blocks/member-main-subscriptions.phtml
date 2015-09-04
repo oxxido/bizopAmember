@@ -1,0 +1,40 @@
+<?php if ($member_products || $member_future_products): ?>
+<ul id="member-subscriptions">
+    <?php foreach ($member_products as $p):  ?>
+    <li><strong><?php echo $p->getTitle(); ?></strong> -
+    <?php if ($products_rebill[$p->pk()]) : ?>
+        <?php __e('next rebill') ?> <?php echo amDate($products_rebill[$p->pk()]); ?>
+    <?php elseif ($products_expire[$p->pk()] == Am_Period::MAX_SQL_DATE): ?>
+        <?php __e('Lifetime') ?>
+    <?php else: ?>
+        <?php __e('expires') ?> <?php echo amDate($products_expire[$p->pk()]); ?>
+    <?php endif ?>
+    <?php if (isset($products_cancel[$p->pk()]) && $products_cancel[$p->pk()]) : ?>
+        <a class="cancel-subscription local-link" href="<?php p($products_cancel[$p->pk()])?>"><?php __e("cancel") ?></a>
+    <?php endif; ?>
+    <?php if (isset($products_upgrade[$p->pk()]) &&  $products_upgrade[$p->pk()]): ?>
+        <a href="javascript:;" class="upgrade-subscription local-link" data-invoice_item_id="<?php p($this->obfuscate($products_upgrade[$p->pk()]->pk())) ?>"><?php __e("upgrade") ?></a>
+    <?php endif; ?>
+    </li>
+    <?php endforeach ?>
+    <?php foreach ($member_future_products as $p) : ?>
+    <li><?php echo $p->getTitle(); ?> -
+        <?php __e('begins') ?> <?php echo amDate($products_begin[$p->pk()]); ?>
+    </li>
+    <?php endforeach; ?>
+</ul>
+<?php else : // Customer doesn't have any active subscriptions ?>
+    <h3><?php __e('You have no active subscriptions') ?></h3>
+    <p><?php __e('Please use %sAdd/Renew subscription%s form to order or renew subscription.',
+        '<a href="' . REL_ROOT_URL . '/signup">','</a>') ?></p>
+<?php endif ?>
+<div class="cancel-subscription-popup" data-popup-title="<?php __e('Cancel Subscription')?>" style="display:none">
+    <?php include $this->_script('member/_cancel.phtml') ?>
+</div>
+<?php foreach ($products_upgrade as $item) : ?>
+<?php $invoice = $di->invoiceTable->load($item->invoice_id); ?>
+<div class="upgrade-subscription-popup upgrade-subscription-popup-<?php p($this->obfuscate($item->pk())) ?>"
+                 style="display:none" data-popup-title="<?php __e('Change Subscription') ?>">
+    <?php include $this->_script('member/_upgrade.phtml') ?>
+</div>
+<?php endforeach; ?>
