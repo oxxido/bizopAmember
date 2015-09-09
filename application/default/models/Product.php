@@ -357,11 +357,30 @@ class Product extends Am_Record_WithData implements IProduct
     
     function defaultRender(BillingPlan $plan = null, $short = false)
     {
+        $price = "0";
+        $period = new Am_Period($plan->first_period);
+        if(!$plan->isFree()){
+            $price = $plan->first_price;
+
+        }
+        /*die(print_r($plan));
         return sprintf('<span class="am-product-title">%s</span> <span class="am-product-terms">%s</span> <span class="am-product-desc">%s</span>',
             $this->getTitle(false),
             $plan ? ___($plan->getTerms()) : "",
             $this->getDescription(false)
-            );
+            );*/
+        return sprintf("
+            <p class='main-title'>%s</p>
+            <p class='price'>$%s</p>
+            <p class='period'>%s</p>
+
+            <button type='button' class='btn btn-warning signup'>Sign Up</button>
+
+            <p class='item'>%s</p>",
+          $this->getTitle(false),
+          $price,
+          $period->getText(),
+          $this->getDescription(false));
     }
 
     public function addQty($requestedQty, $itemQty)

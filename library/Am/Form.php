@@ -492,15 +492,23 @@ image gallery script</span><br></label></div>
             }
             $el_name = $this->type == 'checkbox' ? "{$name}[{$value}]" : ($name.'[]');
             $value = Am_Controller::escape($o['options']['value']);
-            $ret[] = "
+            /*$ret[] = "
             <label for='$id'>
               <input type='{$this->type}' id='$id' name='$el_name' value='$value' $attrs />
               $qty_input
               $label
             </label>
+            ";*/
+            $ret[] = "
+                <div class='col-sm-4'>
+                    <div class='plan-box'>
+                        $label
+                        <button type='button' class='btn btn-warning more'>More Features</button>
+                    </div>
+                </div>
             ";
         }
-        return implode('<br />', $ret);
+        return implode('', $ret);
     }
 
     public function getRawValue()
