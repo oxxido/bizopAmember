@@ -1,21 +1,157 @@
-<?php 
+<?php
 /*if (empty($title)) $title=___('Sign-up');
 else $title=___($title);*/
-$this->setLayout('layout2.phtml'); 
+$this->setLayout('layout.phtml');
 include $this->_script('_error.phtml');
 
 $this->headScript()
         ->appendFile(REL_ROOT_URL . '/application/default/views/public/js/jquery/jquery.validate.js');
+$this->headScript()
+    ->appendFile(REL_ROOT_URL . '/application/default/views/public/js/signup.js');
 ?>
-Na!
-<div class="am-signup">
-<?php //echo $this->blocks('signup/login/before') ?>
-<?php //include $this->_script('signup/_login-offer.phtml'); ?>
-<?php //echo $this->blocks('signup/login/after') ?>
-    
-<?php //echo $this->blocks('signup/form/before') ?>
-<?php include $this->_script('_form.phtml'); ?>
-<?php //echo $this->blocks('signup/form/after') ?>
-<?php // include $this->_script('signup/_new-login-offer.phtml'); ?>
-</div>
+
 <?php include $this->_script('js.country_state.js'); ?>
+
+<?php
+
+$frm = $this->form->renderEasyArray(); // get html elements to include into your custom html
+//echo '<pre>'.htmlentities(print_r($frm, true)).'</pre>'; // dump elements to your review
+//include $this->_script('_form.phtml');
+?>
+
+<div class="wrapper pageMiddle plan-op">
+    <div class="clearfix">
+        <p class="lead a-center small"> Start experiencing the benefits of being a Biz Op Reports member. <br/>
+            Select a plan below and sign up today!</p>
+        <div class="clearfix">
+            <?php echo $frm['elements']['product_id_page-0-0']['html'] ?>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper pageMiddle shignUp plan-op-form" style="display: none">
+    <h2 class="secTitle">You are just one step away from subscribing to the Platinum Plan!</h2>
+    <div class="leftCol signUp">
+        <form class="am-form" <?php echo $frm['attributes'];?>>
+            <?php echo $frm['hidden'];// insert hidden form elements  - REQUIRED ?>
+            <?php echo $frm['javascript']; // insert javascript code - REQUIRED ?>
+            <ul class="fieldSet">
+                <li class="fields">
+                    <div class="field">
+                        <label><?php echo $frm['elements']['qfauto-1']['label'] ?></label>
+                        <?php echo $frm['elements']['qfauto-1']['htmle'] ?>
+                    </div>
+                    <div class="field">
+                        <label><?php echo $frm['elements']['qfauto-2']['label'] ?></label>
+                        <?php echo $frm['elements']['qfauto-2']['htmle'] ?>
+                    </div>
+                </li>
+                <li class="fields">
+                    <div class="field">
+                        <label><?php echo $frm['elements']['email-0']['label'] ?></label>
+                        <?php echo $frm['elements']['email-0']['htmle'] ?>
+                    </div>
+                    <div class="field">
+                        <label><?php echo $frm['elements']['phone-0']['label'] ?></label>
+                        <?php echo $frm['elements']['phone-0']['htmle'] ?>
+                    </div>
+                </li>
+            </ul>
+                <ul class="fieldSet">
+                    <li class="fields">
+                        <div class="field">
+                            <label><?php echo $frm['elements']['street-0']['label'] ?></label>
+                            <?php echo $frm['elements']['street-0']['htmle'] ?>
+                        </div>
+                        <div class="field">
+                            <label><?php echo $frm['elements']['city-0']['label'] ?></label>
+                            <?php echo $frm['elements']['city-0']['htmle'] ?>
+                        </div>
+                    </li>
+                    <li class="fields">
+                        <div class="field">
+                            <label><?php echo $frm['elements']['qfauto-4']['label'] ?></label>
+                            <?php echo $frm['elements']['qfauto-4']['htmle'] ?>
+                        </div>
+                        <div class="field">
+                            <label><?php echo $frm['elements']['zip-0']['label'] ?></label>
+                            <?php echo $frm['elements']['zip-0']['htmle'] ?>
+                        </div>
+                    </li>
+                    <li class="fields">
+                        <div class="field">
+                            <label><?php echo $frm['elements']['f_country']['label'] ?></label>
+                            <?php echo $frm['elements']['f_country']['htmle'] ?>
+                        </div>
+                        <div class="field"></div>
+                    </li>
+                </ul>
+                <ul class="fieldSet">
+                    <li class="fields">
+                        <div class="field">
+                            <label><?php echo $frm['elements']['occupation-0']['label'] ?></label>
+                            <?php echo $frm['elements']['occupation-0']['htmle'] ?>
+                        </div>
+                        <div class="field">
+                            <label><?php echo $frm['elements']['profession-0']['label'] ?></label>
+                            <?php echo $frm['elements']['profession-0']['htmle'] ?>
+                        </div>
+                    </li>
+                    <li class="fields">
+                        <div class="field">
+                            <label><?php echo $frm['elements']['income-0']['label'] ?></label>
+                            <?php echo $frm['elements']['income-0']['htmle'] ?>
+                        </div>
+                        <div class="field">
+                            <label><?php echo $frm['elements']['highest_leve_education-0']['label'] ?></label>
+                            <?php echo $frm['elements']['highest_leve_education-0']['htmle'] ?>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="fieldSet">
+                    <li class="fields">
+                        <div class="field">
+                            <label><?php echo $frm['elements']['login-0']['label'] ?></label>
+                            <?php echo $frm['elements']['login-0']['htmle'] ?>
+                        </div>
+                        <div class="field">
+                            <label><?php echo $frm['elements']['pass-0']['label'] ?></label>
+                            <?php echo $frm['elements']['pass-0']['htmle'] ?>
+                        </div>
+                        <div class="field">
+                            <label><?php echo $frm['elements']['pass-confirm']['label'][0] ?></label>
+                            <?php echo $frm['elements']['pass-confirm']['htmle'] ?>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="fieldSet">
+                    <li class="wide">
+                        <div class="field">
+                            <label><?php echo $frm['elements']['coupon-0']['label'] ?></label>
+                            <?php echo $frm['elements']['coupon-0']['htmle'] ?>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="fieldSet">
+                    <li class="wide terms">
+                        <?php echo $frm['elements']['fieldset-agreement']['elements']['i_agree-0']['htmle'] ?>
+                        <?php echo $frm['elements']['fieldset-agreement']['elements']['_agreement-0']['html'] ?>
+                    </li>
+                </ul>
+                <br />
+                <div class="a-center">
+                    <input type="submit" class="button moreBigBut" value="SUBSCRIBE NOW">
+                    <?php // echo $frm['elements']['buttons']['htmle'] ?>
+                </div>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+         </form>
+    </div>
+    <div class="rightCol">
+        <div class="palnDetails">
+            As part of the <span class="plan_name"></span> PLAN, your credit card on file will be billed <span class="yellow plan-price"></span> each month, and the plan includes:
+        </div>
+        <ul class="palnpoints">
+        </ul>
+    </div>
+</div>

@@ -499,14 +499,7 @@ image gallery script</span><br></label></div>
               $label
             </label>
             ";*/
-            $ret[] = "
-                <div class='col-sm-4'>
-                    <div class='plan-box'>
-                        $label
-                        <button type='button' class='btn btn-warning more'>More Features</button>
-                    </div>
-                </div>
-            ";
+            $ret[] = "<input style='display: none' type='{$this->type}' id='$id' name='$el_name' value='$value' $attrs />" . $label;
         }
         return implode('', $ret);
     }

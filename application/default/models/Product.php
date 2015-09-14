@@ -363,24 +363,56 @@ class Product extends Am_Record_WithData implements IProduct
             $price = $plan->first_price;
 
         }
-        /*die(print_r($plan));
+
+        switch($period->getUnit()){
+            case 'd':
+                $price = $price * 30;
+                break;
+            case 'y':
+                $price = $price / 12;
+                break;
+        }
+        /*
         return sprintf('<span class="am-product-title">%s</span> <span class="am-product-terms">%s</span> <span class="am-product-desc">%s</span>',
             $this->getTitle(false),
             $plan ? ___($plan->getTerms()) : "",
             $this->getDescription(false)
             );*/
-        return sprintf("
-            <p class='main-title'>%s</p>
-            <p class='price'>$%s</p>
-            <p class='period'>%s</p>
 
-            <button type='button' class='btn btn-warning signup'>Sign Up</button>
+        $descriptions = str_replace(array("\r\n", "\n", "\r", "\n\r"), "|", $this->getDescription(false));
+        $descriptions = explode("|", $descriptions);
+        $description_li = '';
+        foreach($descriptions as $description){
+            $description_li .= '<li>'.$description.'</li>';
+        }
+        //TODO implement using CSS class idProduct-#
+        $class_type = array(
+            'FREE' => 'blue',
+            'PRO' => 'orange',
+            'PLATINUM' => 'red'
+        );
+        $output = '<div class="signUpBox" id="box-idProduct-%s">
+        <div class="boxHeading">
+          <h3>%s</h3>
+          <span class="%s idProduct-%s">%s</span> </div>
+        <div class="singUpRate">
+          <label><sup>$</sup><span class="price">%s</span><sup>/mo</sup></label>
+          <a href="#" class="btnSignup" id="idProduct-%s">Sign Up</a> </div>
+        <ul class="description">
+          %s
+        </ul>
+      </div>';
 
-            <p class='item'>%s</p>",
+
+        return sprintf($output,
+          $plan->getProduct()->product_id,
           $this->getTitle(false),
+          isset($class_type[$this->getTitle(false)]) ? $class_type[$this->getTitle(false)]:'blue',
+          $plan->getProduct()->product_id,
+          $plan->getTerms(),
           $price,
-          $period->getText(),
-          $this->getDescription(false));
+          $plan->getProduct()->product_id,
+          $description_li);
     }
 
     public function addQty($requestedQty, $itemQty)
